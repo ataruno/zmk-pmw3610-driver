@@ -63,23 +63,28 @@ static int (*const async_init_fn[ASYNC_INIT_STEP_COUNT])(const struct device *de
 
 // checked and keep
 static int spi_cs_ctrl(const struct device *dev, bool enable) {
-    const struct pixart_config *config = dev->config;
-    int err;
+    // const struct pixart_config *config = dev->config;
+    // int err;
 
-    if (!enable) {
-        k_busy_wait(T_NCS_SCLK);
-    }
+    // if (!enable) {
+    //     k_busy_wait(T_NCS_SCLK);
+    // }
 
-    err = gpio_pin_set_dt(&config->cs_gpio, (int)enable);
-    if (err) {
-        LOG_ERR("SPI CS ctrl failed");
-    }
+    // err = gpio_pin_set_dt(&config->cs_gpio, (int)enable);
+    // if (err) {
+    //     LOG_ERR("SPI CS ctrl failed");
+    // }
 
-    if (enable) {
-        k_busy_wait(T_NCS_SCLK);
-    }
+    // if (enable) {
+    //     k_busy_wait(T_NCS_SCLK);
+    // }
 
-    return err;
+    // return err;
+
+    //(変更箇所)
+    // CSを常にオフとして扱うため、enableの値を無視する
+    // 何も操作をせず、常に成功を返す
+    retune 0; //成功を示す。
 }
 
 // checked and keep
@@ -782,16 +787,16 @@ static int pmw3610_init(const struct device *dev) {
     k_work_init(&data->trigger_work, pmw3610_work_callback);
 
     // check readiness of cs gpio pin and init it to inactive
-    if (!device_is_ready(config->cs_gpio.port)) {
-        LOG_ERR("SPI CS device not ready");
-        return -ENODEV;
-    }
+    // if (!device_is_ready(config->cs_gpio.port)) {
+    //     LOG_ERR("SPI CS device not ready");
+    //     return -ENODEV;
+    // }
 
-    err = gpio_pin_configure_dt(&config->cs_gpio, GPIO_OUTPUT_INACTIVE);
-    if (err) {
-        LOG_ERR("Cannot configure SPI CS GPIO");
-        return err;
-    }
+    // err = gpio_pin_configure_dt(&config->cs_gpio, GPIO_OUTPUT_INACTIVE);
+    // if (err) {
+    //     LOG_ERR("Cannot configure SPI CS GPIO");
+    //     return err;
+    // }
 
     // init irq routine
     err = pmw3610_init_irq(dev);
@@ -828,7 +833,6 @@ static int pmw3610_init(const struct device *dev) {
                         .slave = DT_INST_REG_ADDR(n),                                              \
                     },                                                                             \
             },                                                                                     \
-        .cs_gpio = SPI_CS_GPIOS_DT_SPEC_GET(DT_DRV_INST(n)),                                       \
         .scroll_layers = scroll_layers##n,                                                         \
         .scroll_layers_len = DT_PROP_LEN(DT_DRV_INST(n), scroll_layers),                           \
         .snipe_layers = snipe_layers##n,                                                           \
