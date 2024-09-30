@@ -63,28 +63,23 @@ static int (*const async_init_fn[ASYNC_INIT_STEP_COUNT])(const struct device *de
 
 // checked and keep
 static int spi_cs_ctrl(const struct device *dev, bool enable) {
-    // const struct pixart_config *config = dev->config;
-    // int err;
+    const struct pixart_config *config = dev->config;
+    int err;
 
-    // if (!enable) {
-    //     k_busy_wait(T_NCS_SCLK);
-    // }
+    if (!enable) {
+        k_busy_wait(T_NCS_SCLK);
+    }
 
-    // err = gpio_pin_set_dt(&config->cs_gpio, (int)enable);
-    // if (err) {
-    //     LOG_ERR("SPI CS ctrl failed");
-    // }
+    err = gpio_pin_set_dt(&config->cs_gpio, (int)enable);
+    if (err) {
+        LOG_ERR("SPI CS ctrl failed");
+    }
 
-    // if (enable) {
-    //     k_busy_wait(T_NCS_SCLK);
-    // }
+    if (enable) {
+        k_busy_wait(T_NCS_SCLK);
+    }
 
-    // return err;
-
-    //(変更箇所)
-    // CSを常にオフとして扱うため、enableの値を無視する
-    // 何も操作をせず、常に成功を返す
-    return 0; //成功を示す。
+    return err;
 }
 
 // checked and keep
@@ -95,10 +90,10 @@ static int reg_read(const struct device *dev, uint8_t reg, uint8_t *buf) {
 
     __ASSERT_NO_MSG((reg & SPI_WRITE_BIT) == 0);
 
-    // err = spi_cs_ctrl(dev, true);
-    // if (err) {
-    //     return err;
-    // }
+    err = spi_cs_ctrl(dev, true);
+    if (err) {
+        return err;
+    }
 
     /* Write register address. */
     const struct spi_buf tx_buf = {.buf = &reg, .len = 1};
@@ -128,10 +123,10 @@ static int reg_read(const struct device *dev, uint8_t reg, uint8_t *buf) {
         return err;
     }
 
-    // err = spi_cs_ctrl(dev, false);
-    // if (err) {
-    //     return err;
-    // }
+    err = spi_cs_ctrl(dev, false);
+    if (err) {
+        return err;
+    }
 
     k_busy_wait(T_SRX);
 
@@ -146,10 +141,10 @@ static int _reg_write(const struct device *dev, uint8_t reg, uint8_t val) {
 
     __ASSERT_NO_MSG((reg & SPI_WRITE_BIT) == 0);
 
-    // err = spi_cs_ctrl(dev, true);
-    // if (err) {
-    //     return err;
-    // }
+    err = spi_cs_ctrl(dev, true);
+    if (err) {
+        return err;
+    }
 
     uint8_t buf[] = {SPI_WRITE_BIT | reg, val};
     const struct spi_buf tx_buf = {.buf = buf, .len = ARRAY_SIZE(buf)};
@@ -163,10 +158,10 @@ static int _reg_write(const struct device *dev, uint8_t reg, uint8_t val) {
 
     k_busy_wait(T_SCLK_NCS_WR);
 
-    // err = spi_cs_ctrl(dev, false);
-    // if (err) {
-    //     return err;
-    // }
+    err = spi_cs_ctrl(dev, false);
+    if (err) {
+        return err;
+    }
 
     k_busy_wait(T_SWX);
 
@@ -204,10 +199,10 @@ static int motion_burst_read(const struct device *dev, uint8_t *buf, size_t burs
 
     __ASSERT_NO_MSG(burst_size <= PMW3610_MAX_BURST_SIZE);
 
-    // err = spi_cs_ctrl(dev, true);
-    // if (err) {
-    //     return err;
-    // }
+    err = spi_cs_ctrl(dev, true);
+    if (err) {
+        return err;
+    }
 
     /* Send motion burst address */
     uint8_t reg_buf[] = {PMW3610_REG_MOTION_BURST};
@@ -234,10 +229,10 @@ static int motion_burst_read(const struct device *dev, uint8_t *buf, size_t burs
         return err;
     }
 
-    // err = spi_cs_ctrl(dev, false);
-    // if (err) {
-    //     return err;
-    // }
+    err = spi_cs_ctrl(dev, false);
+    if (err) {
+        return err;
+    }
 
     /* Terminate burst */
     k_busy_wait(T_BEXIT);
@@ -787,16 +782,16 @@ static int pmw3610_init(const struct device *dev) {
     k_work_init(&data->trigger_work, pmw3610_work_callback);
 
     // check readiness of cs gpio pin and init it to inactive
-    // if (!device_is_ready(config->cs_gpio.port)) {
-    //     LOG_ERR("SPI CS device not ready");
-    //     return -ENODEV;
-    // }
+    if (!device_is_ready(config->cs_gpio.port)) {
+        LOG_ERR("SPI CS device not ready");
+        return -ENODEV;
+    }
 
-    // err = gpio_pin_configure_dt(&config->cs_gpio, GPIO_OUTPUT_INACTIVE);
-    // if (err) {
-    //     LOG_ERR("Cannot configure SPI CS GPIO");
-    //     return err;
-    // }
+    err = gpio_pin_configure_dt(&config->cs_gpio, GPIO_OUTPUT_INACTIVE);
+    if (err) {
+        LOG_ERR("Cannot configure SPI CS GPIO");
+        return err;
+    }
 
     // init irq routine
     err = pmw3610_init_irq(dev);
@@ -833,6 +828,7 @@ static int pmw3610_init(const struct device *dev) {
                         .slave = DT_INST_REG_ADDR(n),                                              \
                     },                                                                             \
             },                                                                                     \
+        .cs_gpio = SPI_CS_GPIOS_DT_SPEC_GET(DT_DRV_INST(n)),                                       \
         .scroll_layers = scroll_layers##n,                                                         \
         .scroll_layers_len = DT_PROP_LEN(DT_DRV_INST(n), scroll_layers),                           \
         .snipe_layers = snipe_layers##n,                                                           \
