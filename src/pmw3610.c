@@ -95,10 +95,10 @@ static int reg_read(const struct device *dev, uint8_t reg, uint8_t *buf) {
 
     __ASSERT_NO_MSG((reg & SPI_WRITE_BIT) == 0);
 
-    err = spi_cs_ctrl(dev, true);
-    if (err) {
-        return err;
-    }
+    // err = spi_cs_ctrl(dev, true);
+    // if (err) {
+    //     return err;
+    // }
 
     /* Write register address. */
     const struct spi_buf tx_buf = {.buf = &reg, .len = 1};
@@ -128,10 +128,10 @@ static int reg_read(const struct device *dev, uint8_t reg, uint8_t *buf) {
         return err;
     }
 
-    err = spi_cs_ctrl(dev, false);
-    if (err) {
-        return err;
-    }
+    // err = spi_cs_ctrl(dev, false);
+    // if (err) {
+    //     return err;
+    // }
 
     k_busy_wait(T_SRX);
 
@@ -146,10 +146,10 @@ static int _reg_write(const struct device *dev, uint8_t reg, uint8_t val) {
 
     __ASSERT_NO_MSG((reg & SPI_WRITE_BIT) == 0);
 
-    err = spi_cs_ctrl(dev, true);
-    if (err) {
-        return err;
-    }
+    // err = spi_cs_ctrl(dev, true);
+    // if (err) {
+    //     return err;
+    // }
 
     uint8_t buf[] = {SPI_WRITE_BIT | reg, val};
     const struct spi_buf tx_buf = {.buf = buf, .len = ARRAY_SIZE(buf)};
@@ -163,10 +163,10 @@ static int _reg_write(const struct device *dev, uint8_t reg, uint8_t val) {
 
     k_busy_wait(T_SCLK_NCS_WR);
 
-    err = spi_cs_ctrl(dev, false);
-    if (err) {
-        return err;
-    }
+    // err = spi_cs_ctrl(dev, false);
+    // if (err) {
+    //     return err;
+    // }
 
     k_busy_wait(T_SWX);
 
@@ -204,10 +204,10 @@ static int motion_burst_read(const struct device *dev, uint8_t *buf, size_t burs
 
     __ASSERT_NO_MSG(burst_size <= PMW3610_MAX_BURST_SIZE);
 
-    err = spi_cs_ctrl(dev, true);
-    if (err) {
-        return err;
-    }
+    // err = spi_cs_ctrl(dev, true);
+    // if (err) {
+    //     return err;
+    // }
 
     /* Send motion burst address */
     uint8_t reg_buf[] = {PMW3610_REG_MOTION_BURST};
@@ -234,10 +234,10 @@ static int motion_burst_read(const struct device *dev, uint8_t *buf, size_t burs
         return err;
     }
 
-    err = spi_cs_ctrl(dev, false);
-    if (err) {
-        return err;
-    }
+    // err = spi_cs_ctrl(dev, false);
+    // if (err) {
+    //     return err;
+    // }
 
     /* Terminate burst */
     k_busy_wait(T_BEXIT);
