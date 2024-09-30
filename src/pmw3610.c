@@ -84,7 +84,7 @@ static int spi_cs_ctrl(const struct device *dev, bool enable) {
     //(変更箇所)
     // CSを常にオフとして扱うため、enableの値を無視する
     // 何も操作をせず、常に成功を返す
-    retune 0; //成功を示す。
+    return 0; //成功を示す。
 }
 
 // checked and keep
