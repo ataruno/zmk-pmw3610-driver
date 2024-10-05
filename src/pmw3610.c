@@ -62,25 +62,25 @@ static int (*const async_init_fn[ASYNC_INIT_STEP_COUNT])(const struct device *de
 //////// Function definitions //////////
 
 // checked and keep
-static int spi_cs_ctrl(const struct device *dev, bool enable) {
-    const struct pixart_config *config = dev->config;
-    int err;
+// static int spi_cs_ctrl(const struct device *dev, bool enable) {
+//     const struct pixart_config *config = dev->config;
+//     int err;
 
-    if (!enable) {
-        k_busy_wait(T_NCS_SCLK);
-    }
+//     if (!enable) {
+//         k_busy_wait(T_NCS_SCLK);
+//     }
 
-    err = gpio_pin_set_dt(&config->cs_gpio, (int)enable);
-    if (err) {
-        LOG_ERR("SPI CS ctrl failed");
-    }
+//     err = gpio_pin_set_dt(&config->cs_gpio, (int)enable);
+//     if (err) {
+//         LOG_ERR("SPI CS ctrl failed");
+//     }
 
-    if (enable) {
-        k_busy_wait(T_NCS_SCLK);
-    }
+//     if (enable) {
+//         k_busy_wait(T_NCS_SCLK);
+//     }
 
-    return err;
-}
+//     return err;
+// }
 
 // checked and keep
 static int reg_read(const struct device *dev, uint8_t reg, uint8_t *buf) {
