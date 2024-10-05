@@ -66,18 +66,18 @@ static int (*const async_init_fn[ASYNC_INIT_STEP_COUNT])(const struct device *de
 //     const struct pixart_config *config = dev->config;
 //     int err;
 
-//     if (!enable) {
-//         k_busy_wait(T_NCS_SCLK);
-//     }
+    // if (!enable) {
+    //     k_busy_wait(T_NCS_SCLK);
+    // }
 
 //     err = gpio_pin_set_dt(&config->cs_gpio, (int)enable);
 //     if (err) {
 //         LOG_ERR("SPI CS ctrl failed");
 //     }
 
-//     if (enable) {
-//         k_busy_wait(T_NCS_SCLK);
-//     }
+    // if (enable) {
+        k_busy_wait(T_NCS_SCLK);
+    // }
 
 //     return err;
 // }
@@ -156,7 +156,7 @@ static int _reg_write(const struct device *dev, uint8_t reg, uint8_t val) {
         return err;
     }
 
-    // k_busy_wait(T_SCLK_NCS_WR);
+    k_busy_wait(T_SCLK_NCS_WR);
 
     // err = spi_cs_ctrl(dev, false);
     // if (err) {
