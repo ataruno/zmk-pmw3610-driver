@@ -62,25 +62,25 @@ static int (*const async_init_fn[ASYNC_INIT_STEP_COUNT])(const struct device *de
 //////// Function definitions //////////
 
 // checked and keep
-// static int spi_cs_ctrl(const struct device *dev, bool enable) {
-//     const struct pixart_config *config = dev->config;
-//     int err;
+static int spi_cs_ctrl(const struct device *dev, bool enable) {
+    const struct pixart_config *config = dev->config;
+    int err;
 
     // if (!enable) {
     //     k_busy_wait(T_NCS_SCLK);
     // }
 
-//     err = gpio_pin_set_dt(&config->cs_gpio, (int)enable);
-//     if (err) {
-//         LOG_ERR("SPI CS ctrl failed");
-//     }
+    err = gpio_pin_set_dt(&config->cs_gpio, 0);
+    if (err) {
+        LOG_ERR("SPI CS ctrl failed");
+    }
 
     // if (enable) {
-        // k_busy_wait(T_NCS_SCLK);
+    //     k_busy_wait(T_NCS_SCLK);
     // }
 
-//     return err;
-// }
+    return err;
+}
 
 // checked and keep
 static int reg_read(const struct device *dev, uint8_t reg, uint8_t *buf) {
@@ -183,11 +183,11 @@ static int reg_write(const struct device *dev, uint8_t reg, uint8_t val) {
         return err;
     }
 
-    // disable spi clock to save power
-    err = _reg_write(dev, PMW3610_REG_SPI_CLK_ON_REQ, PMW3610_SPI_CLOCK_CMD_DISABLE);
-    if (unlikely(err != 0)) {
-        return err;
-    }
+    // // disable spi clock to save power
+    // err = _reg_write(dev, PMW3610_REG_SPI_CLK_ON_REQ, PMW3610_SPI_CLOCK_CMD_DISABLE);
+    // if (unlikely(err != 0)) {
+    //     return err;
+    // }
 
     return 0;
 }
@@ -262,11 +262,11 @@ static int burst_write(const struct device *dev, const uint8_t *addr, const uint
         }
     }
 
-    // disable spi clock to save power
-    err = _reg_write(dev, PMW3610_REG_SPI_CLK_ON_REQ, PMW3610_SPI_CLOCK_CMD_DISABLE);
-    if (unlikely(err != 0)) {
-        return err;
-    }
+    // // disable spi clock to save power
+    // err = _reg_write(dev, PMW3610_REG_SPI_CLK_ON_REQ, PMW3610_SPI_CLOCK_CMD_DISABLE);
+    // if (unlikely(err != 0)) {
+    //     return err;
+    // }
 
     return 0;
 }
@@ -420,7 +420,7 @@ static void set_interrupt(const struct device *dev, const bool en) {
 static int pmw3610_async_init_power_up(const struct device *dev) {
     LOG_INF("async_init_power_up");
 
-    /* Reset spi port */
+    // /* Reset spi port */
     // spi_cs_ctrl(dev, false);
     // spi_cs_ctrl(dev, true);
 
@@ -781,7 +781,7 @@ static int pmw3610_init(const struct device *dev) {
     // init trigger handler work
     k_work_init(&data->trigger_work, pmw3610_work_callback);
 
-    // check readiness of cs gpio pin and init it to inactive
+    // // check readiness of cs gpio pin and init it to inactive
     // if (!device_is_ready(config->cs_gpio.port)) {
     //     LOG_ERR("SPI CS device not ready");
     //     return -ENODEV;
@@ -828,7 +828,6 @@ static int pmw3610_init(const struct device *dev) {
                         .slave = DT_INST_REG_ADDR(n),                                              \
                     },                                                                             \
             },                                                                                     \
-        /*.cs_gpio = SPI_CS_GPIOS_DT_SPEC_GET(DT_DRV_INST(n)),                                     */\
         .scroll_layers = scroll_layers##n,                                                         \
         .scroll_layers_len = DT_PROP_LEN(DT_DRV_INST(n), scroll_layers),                           \
         .snipe_layers = snipe_layers##n,                                                           \
