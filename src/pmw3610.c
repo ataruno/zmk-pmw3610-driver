@@ -76,7 +76,7 @@ static int (*const async_init_fn[ASYNC_INIT_STEP_COUNT])(const struct device *de
 //     }
 
     // if (enable) {
-        k_busy_wait(T_NCS_SCLK);
+        // k_busy_wait(T_NCS_SCLK);
     // }
 
 //     return err;
