@@ -184,11 +184,11 @@ static int reg_write(const struct device *dev, uint8_t reg, uint8_t val) {
         return err;
     }
 
-    // // disable spi clock to save power
-    // err = _reg_write(dev, PMW3610_REG_SPI_CLK_ON_REQ, PMW3610_SPI_CLOCK_CMD_DISABLE);
-    // if (unlikely(err != 0)) {
-    //     return err;
-    // }
+    // disable spi clock to save power
+    err = _reg_write(dev, PMW3610_REG_SPI_CLK_ON_REQ, PMW3610_SPI_CLOCK_CMD_DISABLE);
+    if (unlikely(err != 0)) {
+        return err;
+    }
 
     return 0;
 }
