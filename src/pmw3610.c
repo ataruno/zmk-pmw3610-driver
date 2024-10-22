@@ -643,8 +643,8 @@ static int pmw3610_report_data(const struct device *dev) {
         // x = raw_x;
         // y = -raw_y;
         // ORIENTATION_180
-        x = -0.7071 * raw_x + 0.7071 * raw_y;
-        y = -0.7071 * raw_x - 0.7071 * raw_y;
+        x = -0.3 * raw_x + 0.3 * raw_y;
+        y = -0.3 * raw_x - 0.3 * raw_y;
     } else if (IS_ENABLED(CONFIG_PMW3610_ORIENTATION_270)) {
         x = -raw_y;
         y = raw_x;
