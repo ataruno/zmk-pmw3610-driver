@@ -636,15 +636,14 @@ static int pmw3610_report_data(const struct device *dev) {
     if (IS_ENABLED(CONFIG_PMW3610_ORIENTATION_0)) {
         x = -raw_x;
         y = raw_y;
-    } else if (IS_ENABLED(CONFIG_PMW3610_ORIENTATION_45)) {
-        x = 0.7071 * raw_x - 0.7071 * raw_y;
-        y = 0.7071 * raw_x + 0.7071 * raw_y;
     } else if (IS_ENABLED(CONFIG_PMW3610_ORIENTATION_90)) {
         x = raw_y;
         y = -raw_x;
     } else if (IS_ENABLED(CONFIG_PMW3610_ORIENTATION_180)) {
-        x = raw_x;
-        y = -raw_y;
+        // x = raw_x;
+        // y = -raw_y;
+        x = 0.7071 * raw_x - 0.7071 * raw_y;
+        y = 0.7071 * raw_x + 0.7071 * raw_y;
     } else if (IS_ENABLED(CONFIG_PMW3610_ORIENTATION_270)) {
         x = -raw_y;
         y = raw_x;
