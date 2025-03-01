@@ -633,6 +633,20 @@ static int pmw3610_report_data(const struct device *dev) {
     int16_t x;
     int16_t y;
 
+
+    // 速度に応じて滑らかに変化する感度調整
+    const float base_sensitivity = 1.0;  // 通常時の感度
+    const float min_sensitivity = 0.2;   // 低速時の最低感度（調整可能）
+    const float response_curve = 20.0;   // カーブの調整パラメータ
+    float factor_x = min_sensitivity + (base_sensitivity - min_sensitivity) *
+                    (1 - exp(-abs(raw_x) / response_curve));
+    float factor_y = min_sensitivity + (base_sensitivity - min_sensitivity) *
+                    (1 - exp(-abs(raw_y) / response_curve));
+    raw_x *= factor_x;
+    raw_y *= factor_y;
+    // 速度に応じて滑らかに変化する感度調整_end
+
+
     if (IS_ENABLED(CONFIG_PMW3610_ORIENTATION_0)) {
         x = -raw_x;
         y = raw_y;
