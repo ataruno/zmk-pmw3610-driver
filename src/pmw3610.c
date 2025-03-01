@@ -643,8 +643,8 @@ static int pmw3610_report_data(const struct device *dev) {
     float factor_y = 1 + (sensitivity_scale - 1) * (1 - exp(-fabsf(raw_y) / response_curve));
 
     const float base_sensitivity = 1.0;
-    const float min_sensitivity = 0.8;
-    const float response_curve = 50.0;
+    const float min_sensitivity = 0.4;
+    const float response_curve = 40.0;
     float factor_x = min_sensitivity + (base_sensitivity - min_sensitivity) * (1 - exp(-fabsf(raw_x) / response_curve));
     float factor_y = min_sensitivity + (base_sensitivity - min_sensitivity) * (1 - exp(-fabsf(raw_y) / response_curve));
 
