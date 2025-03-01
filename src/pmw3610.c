@@ -3,6 +3,7 @@
  *
  * SPDX-License-Identifier: MIT
  */
+#include <math.h>
 
 #define DT_DRV_COMPAT pixart_pmw3610
 
@@ -644,8 +645,8 @@ static int pmw3610_report_data(const struct device *dev) {
     float adjusted_x = raw_x * factor_x;
     float adjusted_y = raw_y * factor_y;
 
-    int16_t raw_x = (int16_t)adjusted_x;
-    int16_t raw_y = (int16_t)adjusted_y;
+    raw_x = (int16_t)adjusted_x;
+    raw_y = (int16_t)adjusted_y;
     // change sensitivity_end
 
     if (IS_ENABLED(CONFIG_PMW3610_ORIENTATION_0)) {
