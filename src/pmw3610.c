@@ -634,25 +634,18 @@ static int pmw3610_report_data(const struct device *dev) {
     int16_t y;
 
     // change sensitivity
-    static int16_t prev_raw_x = 0;
-    static int16_t prev_raw_y = 0;
-    const float smoothing_factor = 0.5;
-    raw_x = (int16_t)(smoothing_factor * raw_x + (1 - smoothing_factor) * prev_raw_x);
-    raw_y = (int16_t)(smoothing_factor * raw_y + (1 - smoothing_factor) * prev_raw_y);
-
-    prev_raw_x = raw_x;
-    prev_raw_y = raw_y;
-
     const float base_sensitivity = 1.0;
-    const float min_sensitivity = 0.8;
-    const float response_curve = 100.0;
-    float factor_x = min_sensitivity + (base_sensitivity - min_sensitivity) *
-                    (1 - exp(-abs(raw_x) / response_curve));
-    float factor_y = min_sensitivity + (base_sensitivity - min_sensitivity) *
-                    (1 - exp(-abs(raw_y) / response_curve));
+    const float sensitivity_scale = 1.5;
+    const float response_curve = 50.0;
 
-    raw_x *= factor_x;
-    raw_y *= factor_y;
+    float factor_x = 1 + (sensitivity_scale - 1) * (1 - exp(-fabsf(raw_x) / response_curve));
+    float factor_y = 1 + (sensitivity_scale - 1) * (1 - exp(-fabsf(raw_y) / response_curve));
+
+    float adjusted_x = raw_x * factor_x;
+    float adjusted_y = raw_y * factor_y;
+
+    int16_t raw_x = (int16_t)adjusted_x;
+    int16_t raw_y = (int16_t)adjusted_y;
     // change sensitivity_end
 
     if (IS_ENABLED(CONFIG_PMW3610_ORIENTATION_0)) {
