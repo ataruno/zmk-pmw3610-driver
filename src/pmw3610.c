@@ -636,6 +636,7 @@ static int pmw3610_report_data(const struct device *dev) {
     // change sensitivity
     static int16_t prev_raw_x = 0;
     static int16_t prev_raw_y = 0;
+    const float smoothing_factor = 0.5;
     raw_x = (int16_t)(smoothing_factor * raw_x + (1 - smoothing_factor) * prev_raw_x);
     raw_y = (int16_t)(smoothing_factor * raw_y + (1 - smoothing_factor) * prev_raw_y);
 
