@@ -642,11 +642,19 @@ static int pmw3610_report_data(const struct device *dev) {
     float factor_x = 1 + (sensitivity_scale - 1) * (1 - exp(-fabsf(raw_x) / response_curve));
     float factor_y = 1 + (sensitivity_scale - 1) * (1 - exp(-fabsf(raw_y) / response_curve));
 
-    float adjusted_x = raw_x * factor_x;
-    float adjusted_y = raw_y * factor_y;
+    const float base_sensitivity = 1.0;
+    const float min_sensitivity = 0.8;
+    const float response_curve = 50.0;
+    float factor_x = min_sensitivity + (base_sensitivity - min_sensitivity) * (1 - exp(-fabsf(raw_x) / response_curve));
+    float factor_y = min_sensitivity + (base_sensitivity - min_sensitivity) * (1 - exp(-fabsf(raw_y) / response_curve));
 
-    raw_x = (int16_t)adjusted_x;
-    raw_y = (int16_t)adjusted_y;
+    raw_x *= factor_x;
+    raw_y *= factor_y;
+
+    // float adjusted_x = raw_x * factor_x;
+    // float adjusted_y = raw_y * factor_y;
+    // raw_x = (int16_t)adjusted_x;
+    // raw_y = (int16_t)adjusted_y;
     // change sensitivity_end
 
     if (IS_ENABLED(CONFIG_PMW3610_ORIENTATION_0)) {
