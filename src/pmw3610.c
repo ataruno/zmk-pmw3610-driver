@@ -636,7 +636,7 @@ static int pmw3610_report_data(const struct device *dev) {
 
     // 速度に応じて滑らかに変化する感度調整
     const float base_sensitivity = 1.0;  // 通常時の感度
-    const float min_sensitivity = 0.2;   // 低速時の最低感度（調整可能）
+    const float min_sensitivity = 0.5;   // 低速時の最低感度（調整可能）
     const float response_curve = 20.0;   // カーブの調整パラメータ
     float factor_x = min_sensitivity + (base_sensitivity - min_sensitivity) *
                     (1 - exp(-abs(raw_x) / response_curve));
