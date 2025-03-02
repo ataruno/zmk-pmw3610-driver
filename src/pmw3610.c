@@ -626,25 +626,59 @@ static int pmw3610_report_data(const struct device *dev) {
         return err;
     }
 
-    // int16_t raw_x =TOINT16((buf[PMW3610_X_L_POS] + ((buf[PMW3610_XY_H_POS] & 0xF0) << 4)), 12) / dividor;
-    // int16_t raw_y =TOINT16((buf[PMW3610_Y_L_POS] + ((buf[PMW3610_XY_H_POS] & 0x0F) << 8)), 12) / dividor;
+    int16_t raw_x =TOINT16((buf[PMW3610_X_L_POS] + ((buf[PMW3610_XY_H_POS] & 0xF0) << 4)), 12) / dividor;
+    int16_t raw_y =TOINT16((buf[PMW3610_Y_L_POS] + ((buf[PMW3610_XY_H_POS] & 0x0F) << 8)), 12) / dividor;
     int16_t x;
     int16_t y;
-    // change sensitivity
+
+    // change sensitivity_end
     // const float base_sensitivity = 1.0;
-    // const float sensitivity_scale = 2.0;
-    // const float response_curve = 50.0;
-    // float factor_x = 1 + (sensitivity_scale - 1) * (1 - exp(-fabsf(raw_x) / response_curve));
-    // float factor_y = 1 + (sensitivity_scale - 1) * (1 - exp(-fabsf(raw_y) / response_curve));
+    // const float min_sensitivity = 0.5;
+    // const float response_curve = 80.0;
+    // float factor_x = min_sensitivity + (base_sensitivity - min_sensitivity) * (1.0f - expf(-fabsf(raw_x) / response_curve));
+    // float factor_y = min_sensitivity + (base_sensitivity - min_sensitivity) * (1.0f - expf(-fabsf(raw_y) / response_curve));
 
-    const float base_sensitivity = 1.0;
-    const float min_sensitivity = 0.5;
-    const float response_curve = 80.0;
-    float factor_x = min_sensitivity + (base_sensitivity - min_sensitivity) * (1.0f - expf(-fabsf(raw_x) / response_curve));
-    float factor_y = min_sensitivity + (base_sensitivity - min_sensitivity) * (1.0f - expf(-fabsf(raw_y) / response_curve));
+    // float adjusted_x = (float)(raw_x) * factor_x;
+    // float adjusted_y = (float)(raw_y) * factor_y;
+    // raw_x = (int16_t)adjusted_x;
+    // raw_y = (int16_t)adjusted_y;
+    float speed_cpi_x = 1.0
+    float speed_cpi_y = 1.0
 
-    float adjusted_x = (float)(raw_x) * factor_x;
-    float adjusted_y = (float)(raw_y) * factor_y;
+    if (raw_x > 60){
+        speed_cpi_x = 2.0
+    } else if (raw_x > 30){
+        speed_cpi_x = 1.5
+    } else if (raw_x > 5){
+        speed_cpi_x = 1.0
+    } else if (raw_x > 4){
+        speed_cpi_x = 0.9
+    } else if (raw_x > 3){
+        speed_cpi_x = 0.7
+    } else if (raw_x > 2){
+        speed_cpi_x = 0.5
+    } else if (raw_x > 1){
+        speed_cpi_x = 0.2
+    }
+
+    if (raw_y > 60){
+        speed_cpi_y = 2.0
+    } else if (raw_y > 30){
+        speed_cpi_y = 1.5
+    } else if (raw_y > 5){
+        speed_cpi_y = 1.0
+    } else if (raw_y > 4){
+        speed_cpi_y = 0.9
+    } else if (raw_y > 3){
+        speed_cpi_y = 0.7
+    } else if (raw_y > 2){
+        speed_cpi_y = 0.5
+    } else if (raw_y > 1){
+        speed_cpi_y = 0.2
+    }
+
+    float adjusted_x = (float)(raw_x) * speed_cpi_x;
+    float adjusted_y = (float)(raw_y) * speed_cpi_y;
     raw_x = (int16_t)adjusted_x;
     raw_y = (int16_t)adjusted_y;
     // change sensitivity_end
