@@ -665,11 +665,11 @@ static int pmw3610_report_data(const struct device *dev) {
     AbsX=abs(x);
     AbsY=abs(y);
     if (AbsX > 60){
-        speed_cpi_x = 1.3;
-    } else if (AbsX > 30){
         speed_cpi_x = 1.2;
-    } else if (AbsX > 15){
+    } else if (AbsX > 30){
         speed_cpi_x = 1.1;
+    } else if (AbsX > 15){
+        speed_cpi_x = 1.05;
     } else if (AbsX > 5){
         speed_cpi_x = 1.0;
     } else if (AbsX > 4){
@@ -678,11 +678,11 @@ static int pmw3610_report_data(const struct device *dev) {
         speed_cpi_x = 0.6;
     }
     if (AbsY > 60){
-        speed_cpi_y = 1.3;
-    } else if (AbsY > 30){
         speed_cpi_y = 1.2;
-    } else if (AbsY > 15){
+    } else if (AbsY > 30){
         speed_cpi_y = 1.1;
+    } else if (AbsY > 15){
+        speed_cpi_y = 1.05;
     } else if (AbsY > 5){
         speed_cpi_y = 1.0;
     } else if (AbsY > 4){
