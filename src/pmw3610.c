@@ -644,6 +644,8 @@ static int pmw3610_report_data(const struct device *dev) {
     // raw_y = (int16_t)adjusted_y;
     float speed_cpi_x = 1.0;
     float speed_cpi_y = 1.0;
+    float adjusted_x;
+    float adjusted_y;
 
     if (raw_x > 60){
         speed_cpi_x = 2.0;
@@ -677,8 +679,8 @@ static int pmw3610_report_data(const struct device *dev) {
         speed_cpi_y = 0.2;
     }
 
-    float adjusted_x = (float)(raw_x) * speed_cpi_x;
-    float adjusted_y = (float)(raw_y) * speed_cpi_y;
+    adjusted_x = ((float)raw_x) * speed_cpi_x;
+    adjusted_y = ((float)raw_y) * speed_cpi_y;
     raw_x = (int16_t)adjusted_x;
     raw_y = (int16_t)adjusted_y;
     // change sensitivity_end
