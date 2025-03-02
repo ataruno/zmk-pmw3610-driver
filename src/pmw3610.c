@@ -646,35 +646,35 @@ static int pmw3610_report_data(const struct device *dev) {
     float speed_cpi_y = 1.0;
 
     if (raw_x > 60){
-        speed_cpi_x = 2.0
+        speed_cpi_x = 2.0;
     } else if (raw_x > 30){
-        speed_cpi_x = 1.5
+        speed_cpi_x = 1.5;
     } else if (raw_x > 5){
-        speed_cpi_x = 1.0
+        speed_cpi_x = 1.0;
     } else if (raw_x > 4){
-        speed_cpi_x = 0.9
+        speed_cpi_x = 0.9;
     } else if (raw_x > 3){
-        speed_cpi_x = 0.7
+        speed_cpi_x = 0.7;
     } else if (raw_x > 2){
-        speed_cpi_x = 0.5
+        speed_cpi_x = 0.5;
     } else if (raw_x > 1){
-        speed_cpi_x = 0.2
+        speed_cpi_x = 0.2;
     }
 
     if (raw_y > 60){
-        speed_cpi_y = 2.0
+        speed_cpi_y = 2.0;
     } else if (raw_y > 30){
-        speed_cpi_y = 1.5
+        speed_cpi_y = 1.5;
     } else if (raw_y > 5){
-        speed_cpi_y = 1.0
+        speed_cpi_y = 1.0;
     } else if (raw_y > 4){
-        speed_cpi_y = 0.9
+        speed_cpi_y = 0.9;
     } else if (raw_y > 3){
-        speed_cpi_y = 0.7
+        speed_cpi_y = 0.7;
     } else if (raw_y > 2){
-        speed_cpi_y = 0.5
+        speed_cpi_y = 0.5;
     } else if (raw_y > 1){
-        speed_cpi_y = 0.2
+        speed_cpi_y = 0.2;
     }
 
     float adjusted_x = (float)(raw_x) * speed_cpi_x;
