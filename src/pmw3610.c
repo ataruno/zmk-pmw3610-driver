@@ -630,6 +630,8 @@ static int pmw3610_report_data(const struct device *dev) {
     int16_t raw_y =TOINT16((buf[PMW3610_Y_L_POS] + ((buf[PMW3610_XY_H_POS] & 0x0F) << 8)), 12) / dividor;
     int16_t x;
     int16_t y;
+    int16_t AbsX;
+    int16_t AbsY;
 
     if (IS_ENABLED(CONFIG_PMW3610_ORIENTATION_0)) {
         x = -raw_x;
@@ -663,39 +665,37 @@ static int pmw3610_report_data(const struct device *dev) {
     float adjusted_y=1.8;
 
     // // linear
-    if (x > 60){
+    AbsX=abs(x)
+    AbsY=abs(y)
+    if (AbsX > 60){
         speed_cpi_x = 1.8;
-    } else if (x > 30){
+    } else if (AbsX > 30){
         speed_cpi_x = 1.5;
-    } else if (x > 15){
+    } else if (AbsX > 15){
         speed_cpi_x = 1.25;
-    } else if (x > 5){
+    } else if (AbsX > 5){
         speed_cpi_x = 1.0;
-    } else if (x > 4){
+    } else if (AbsX > 4){
         speed_cpi_x = 0.8;
-    } else if (x > 3){
+    } else if (AbsX > 3){
         speed_cpi_x = 0.6;
-    } else if (x > 2){
+    } else if (AbsX > 2){
         speed_cpi_x = 0.4;
-    } else if (x >= 1){
-        speed_cpi_x = 0.2;
     }
-    if (y > 60){
+    if (AbsY > 60){
         speed_cpi_y = 1.8;
-    } else if (y > 30){
+    } else if (AbsY > 30){
         speed_cpi_y = 1.5;
-    } else if (y > 15){
+    } else if (AbsY > 15){
         speed_cpi_y = 1.25;
-    } else if (y > 5){
+    } else if (AbsY > 5){
         speed_cpi_y = 1.0;
-    } else if (y > 4){
+    } else if (AbsY > 4){
         speed_cpi_y = 0.8;
-    } else if (y > 3){
+    } else if (AbsY > 3){
         speed_cpi_y = 0.6;
-    } else if (y > 2){
+    } else if (AbsY > 2){
         speed_cpi_y = 0.4;
-    } else if (y >= 1){
-        speed_cpi_y = 0.2;
     }
 
     adjusted_x = ((float)x) * speed_cpi_x;
@@ -703,7 +703,6 @@ static int pmw3610_report_data(const struct device *dev) {
     x = (int16_t)adjusted_x;
     y = (int16_t)adjusted_y;
     // change sensitivity_end
-
 
 #ifdef CONFIG_PMW3610_SMART_ALGORITHM
     int16_t shutter =
