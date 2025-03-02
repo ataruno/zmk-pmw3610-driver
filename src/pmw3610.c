@@ -662,13 +662,6 @@ static int pmw3610_report_data(const struct device *dev) {
     float adjusted_x=1.8;
     float adjusted_y=1.8;
 
-    // non-linear
-    // const float base_sensitivity = 1.0;
-    // const float min_sensitivity = 0.2;
-    // const float response_curve = 30.0;
-    // speed_cpi_x = min_sensitivity + (base_sensitivity - min_sensitivity) * (1.0f - expf(-fabsf(x) / response_curve));
-    // speed_cpi_y = min_sensitivity + (base_sensitivity - min_sensitivity) * (1.0f - expf(-fabsf(y) / response_curve));
-
     // // linear
     if (x > 60){
         speed_cpi_x = 1.8;
