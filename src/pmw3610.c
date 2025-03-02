@@ -635,22 +635,20 @@ static int pmw3610_report_data(const struct device *dev) {
     int16_t y;
 
     // change sensitivity
-    const float base_sensitivity = 1.0;
-    const float sensitivity_scale = 2.0;
-    const float response_curve = 50.0;
-    float factor_x = 1 + (sensitivity_scale - 1) * (1 - exp(-fabsf(raw_x) / response_curve));
-    float factor_y = 1 + (sensitivity_scale - 1) * (1 - exp(-fabsf(raw_y) / response_curve));
-
     // const float base_sensitivity = 1.0;
-    // const float min_sensitivity = 0.4;
-    // const float response_curve = 40.0;
-    // float factor_x = min_sensitivity + (base_sensitivity - min_sensitivity) * (1 - exp(-fabsf(raw_x) / response_curve));
-    // float factor_y = min_sensitivity + (base_sensitivity - min_sensitivity) * (1 - exp(-fabsf(raw_y) / response_curve));
-    // raw_x *= factor_x;
-    // raw_y *= factor_y;
+    // const float sensitivity_scale = 2.0;
+    // const float response_curve = 50.0;
+    // float factor_x = 1 + (sensitivity_scale - 1) * (1 - exp(-fabsf(raw_x) / response_curve));
+    // float factor_y = 1 + (sensitivity_scale - 1) * (1 - exp(-fabsf(raw_y) / response_curve));
 
-    float adjusted_x = raw_x * factor_x;
-    float adjusted_y = raw_y * factor_y;
+    const float base_sensitivity = 1.0;
+    const float min_sensitivity = 0.5;
+    const float response_curve = 80.0;
+    float factor_x = min_sensitivity + (base_sensitivity - min_sensitivity) * (1 - exp(-fabsf(raw_x) / response_curve));
+    float factor_y = min_sensitivity + (base_sensitivity - min_sensitivity) * (1 - exp(-fabsf(raw_y) / response_curve));
+
+    float adjusted_x = (float)(raw_x) * factor_x;
+    float adjusted_y = (float)(raw_y) * factor_y;
     raw_x = (int16_t)adjusted_x;
     raw_y = (int16_t)adjusted_y;
     // change sensitivity_end
