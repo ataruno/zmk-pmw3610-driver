@@ -642,8 +642,8 @@ static int pmw3610_report_data(const struct device *dev) {
     // float adjusted_y = (float)(raw_y) * factor_y;
     // raw_x = (int16_t)adjusted_x;
     // raw_y = (int16_t)adjusted_y;
-    float speed_cpi_x = 1.0
-    float speed_cpi_y = 1.0
+    float speed_cpi_x = 1.0;
+    float speed_cpi_y = 1.0;
 
     if (raw_x > 60){
         speed_cpi_x = 2.0
