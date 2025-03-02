@@ -632,6 +632,10 @@ static int pmw3610_report_data(const struct device *dev) {
     int16_t y;
     int16_t AbsX;
     int16_t AbsY;
+    float speed_cpi_x = 1.0;
+    float speed_cpi_y = 1.0;
+    float adjusted_x=1.8;
+    float adjusted_y=1.8;
 
     if (IS_ENABLED(CONFIG_PMW3610_ORIENTATION_0)) {
         x = -raw_x;
@@ -658,11 +662,6 @@ static int pmw3610_report_data(const struct device *dev) {
         y = -y;
     }
 
-    // change sensitivity_end
-    float speed_cpi_x = 1.0;
-    float speed_cpi_y = 1.0;
-    float adjusted_x=1.8;
-    float adjusted_y=1.8;
 
     // // linear
     AbsX=abs(x)
