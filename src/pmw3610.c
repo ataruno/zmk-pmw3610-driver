@@ -634,8 +634,6 @@ static int pmw3610_report_data(const struct device *dev) {
     int16_t AbsY;
     float speed_cpi_x = 1.0;
     float speed_cpi_y = 1.0;
-    float adjusted_x=1.8;
-    float adjusted_y=1.8;
 
     if (IS_ENABLED(CONFIG_PMW3610_ORIENTATION_0)) {
         x = -raw_x;
@@ -697,10 +695,8 @@ static int pmw3610_report_data(const struct device *dev) {
         speed_cpi_y = 0.4;
     }
 
-    adjusted_x = ((float)x) * speed_cpi_x;
-    adjusted_y = ((float)y) * speed_cpi_y;
-    x = (int16_t)adjusted_x;
-    y = (int16_t)adjusted_y;
+    x = (int16_t)(((float)x) * speed_cpi_x);
+    y = (int16_t)(((float)y) * speed_cpi_y);
     // change sensitivity_end
 
 #ifdef CONFIG_PMW3610_SMART_ALGORITHM
