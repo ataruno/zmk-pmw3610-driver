@@ -662,10 +662,8 @@ static int pmw3610_report_data(const struct device *dev) {
     AbsXY = abs(x) + abs(y);
     if (AbsXY >= 10){
         speed_cpi = 1.0;
-    } else if (AbsXY >= 5){
-        speed_cpi = 0.9;
     } else{
-        speed_cpi = 0.8;
+        speed_cpi = 0.9;
     }
 
     x = (int16_t)((float)x * speed_cpi);
