@@ -660,7 +660,7 @@ static int pmw3610_report_data(const struct device *dev) {
 
     // // linear
     AbsXY = abs(x) + abs(y);
-    if (AbsXY >= 10){
+    if (AbsXY >= 5){
         speed_cpi = 1.0;
     } else{
         speed_cpi = 0.9;
