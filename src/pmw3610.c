@@ -658,17 +658,17 @@ static int pmw3610_report_data(const struct device *dev) {
         y = -y;
     }
 
-    // // linear
-    AbsXY = abs(x) + abs(y);
-    if (AbsXY >= 5){
-        speed_cpi = 1.0;
-    } else{
-        speed_cpi = 0.9;
-    }
+    // // // linear
+    // AbsXY = abs(x) + abs(y);
+    // if (AbsXY >= 5){
+    //     speed_cpi = 1.0;
+    // } else{
+    //     speed_cpi = 0.9;
+    // }
 
-    x = (int16_t)((float)x * speed_cpi);
-    y = (int16_t)((float)y * speed_cpi);
-    // change sensitivity_end
+    // x = (int16_t)((float)x * speed_cpi);
+    // y = (int16_t)((float)y * speed_cpi);
+    // // change sensitivity_end
 
 #ifdef CONFIG_PMW3610_SMART_ALGORITHM
     int16_t shutter =
