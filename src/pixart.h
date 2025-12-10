@@ -44,6 +44,7 @@ struct pixart_config {
     uint8_t y_input_code;
     bool force_awake;
     bool force_awake_4ms_mode;
+    bool disable_burst_read;
 };
 
 #ifdef __cplusplus

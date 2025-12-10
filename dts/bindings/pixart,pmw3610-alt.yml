@@ -32,3 +32,5 @@ properties:
     type: boolean
   force-awake-4ms-mode:
     type: boolean
+  disable-bust-read:
+    type: boolean

@@ -482,9 +482,23 @@ static int pmw3610_report_data(const struct device *dev) {
     int64_t now = k_uptime_get();
 #endif
 
-	int err = pmw3610_read(dev, PMW3610_REG_MOTION_BURST, buf, PMW3610_BURST_SIZE);
-    if (err) {
-        return err;
+	// int err = pmw3610_read(dev, PMW3610_REG_MOTION_BURST, buf, PMW3610_BURST_SIZE);
+    // if (err) {
+    //     return err;
+    // }
+    if (!config->disable_burst_read) {
+        // Burst mode requires cs pin to reset
+        int err = pmw3610_read(dev, PMW3610_REG_MOTION_BURST, buf, sizeof(buf));
+        if (err) {
+            return err;
+        }
+    } else {
+        for (size_t i = 0; i < PMW3610_BURST_SIZE; i++) {
+            int err = pmw3610_read(dev, PMW3610_REG_MOTION + i, &buf[i], 1);
+            if (err) {
+                return err;
+            }
+        }
     }
     // LOG_HEXDUMP_DBG(buf, PMW3610_BURST_SIZE, "buf");
 
@@ -549,7 +563,7 @@ static int pmw3610_report_data(const struct device *dev) {
         }
     }
 
-    return err;
+    return 0;
 }
 
 static void pmw3610_gpio_callback(const struct device *gpiob, struct gpio_callback *cb,
@@ -719,6 +733,7 @@ static const struct sensor_driver_api pmw3610_driver_api = {
         .y_input_code = DT_PROP(DT_DRV_INST(n), y_input_code),                                     \
         .force_awake = DT_PROP(DT_DRV_INST(n), force_awake),                                       \
         .force_awake_4ms_mode = DT_PROP(DT_DRV_INST(n), force_awake_4ms_mode),                     \
+        .disable_burst_read = DT_PROP(DT_DRV_INST(n), disable_burst_read),                         \
     };                                                                                             \
     DEVICE_DT_INST_DEFINE(n, pmw3610_init, NULL, &data##n, &config##n, POST_KERNEL,                \
                           CONFIG_INPUT_PMW3610_INIT_PRIORITY, &pmw3610_driver_api);
