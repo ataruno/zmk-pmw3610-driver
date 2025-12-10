@@ -15,6 +15,7 @@
 extern "C" {
 #endif
 
+
 /* device data structure */
 struct pixart_data {
     const struct device *dev;
